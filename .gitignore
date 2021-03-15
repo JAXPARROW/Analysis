@@ -1,0 +1,11 @@
+env 
+.vscode
+.idea
+.media
+db.sqlite3
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.pyc
+
