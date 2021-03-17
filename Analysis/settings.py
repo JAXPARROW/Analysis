@@ -1,14 +1,31 @@
+import os
+import json
+
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
+    secrets = json.load(secrets_file)
+    
+
+def get_secret(setting, secrets=secrets):
+    """Get secret setting or fail with ImproperlyConfigured"""
+    try:
+        return secrets[setting]
+    except KeyError:
+        raise ImproperlyConfigured("Set the {} setting".format(setting))
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'hawhv8r9^hx&##d+q9(kun_6b2txq)rw5j#%*4h1(ayl91rtu8'
+
+SECRET_KEY = get_secret('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,9 +79,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Analysis.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -75,15 +89,13 @@ WSGI_APPLICATION = 'Analysis.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pivotech',
-        'USER': 'root',
-        'PASSWORD': "",
-        'HOST': "127.0.0.1",
-        'PORT': "3306",
-        # 'OPTIONS': {
-        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        #     }
+        'ENGINE': get_secret('DB_ENGINE'),
+        'NAME': get_secret('DB_NAME'),
+        'USER': get_secret('DB_USER'),
+        'PASSWORD': get_secret('DB_PASSWORD'),
+        'HOST': get_secret('DB_HOST'),
+        'PORT': get_secret('DB_PORT'),
+      
         }
     }
 
@@ -125,5 +137,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL='/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'media/')
 
 IMPORT_EXPORT_USE_TRANSACTIONS = False
