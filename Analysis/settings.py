@@ -95,7 +95,9 @@ DATABASES = {
         'PASSWORD': get_secret('DB_PASSWORD'),
         'HOST': get_secret('DB_HOST'),
         'PORT': get_secret('DB_PORT'),
-      
+        'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            }
         }
     }
 
@@ -124,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 

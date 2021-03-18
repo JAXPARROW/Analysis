@@ -65,3 +65,9 @@ class RelayDataAadmin(ImportExportModelAdmin):
     date_hierarchy = 'StartDate'
     actions = [delete_all_Relay_Data]
     list_filter = (Over_Run,)
+
+
+
+
+admin.site.site_header = "IoT"
+admin.site.site_title = "IoT"
